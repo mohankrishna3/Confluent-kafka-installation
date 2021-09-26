@@ -1,0 +1,58 @@
+Confluent Kafka 6.2 Installation in Linux
+Pre-Requisites:
+
+1. Operating System:  
+  Linux 7 or Linux 8 Operating system is needed 
+    Verify using the command: cat /etc/redhat-release
+ 
+
+2. Ram and Hard Disk:
+	--> Minimum 4 GB RAM is needed. But the recommended is 32 GB of RAM
+		free -h  to see the RAM memory in the linux server
+	--> 500 GB Hard disk is minimum required. Because Kafka needs to store really huge data
+		df –h  to see the hard disk size in your computer
+
+
+3. Java in the server
+  a.	java –version  to check the java version
+  b.	yum install java  to install java
+
+Installation Procedure:
+(You must have root user access to install)
+
+
+1.	Install confluent 6.2
+     a.	Follow the instructions in the below URL
+        https://docs.confluent.io/platform/current/installation/installing_cp/rhel-centos.html
+    b.	Verify the packages if installed or not
+        rpm -qa |grep confluent
+
+    c.	Verify the kafka file systems
+        i.	/etc/kafka  configuration files related to kafka and zookeeper
+        ii.	/etc/kafka-rest  Configuration files related to kafka rest
+        iii.	/etc/schma-registry  Configuration files related to schema registry
+        iv.	/var/log/kafka  Kafka log files
+        v.	/usr/bin  kafka and zookeeper related binaries
+        vi.	/var/lib/zookeeper  To store zookeeper related data
+        vii.	/var/lib/kafka  To store kafka related data
+
+    d.	systemd units of kafka services
+        i.	systemctl status confluent-zookeeper
+        ii.	systemctl status confluent-kafka
+
+
+2.	Start zookeeper and kafka
+    a.	Let’s start zookeeper
+    systemctl start confluent-zookeeper
+
+    b.	Lets’ start kafka
+        i.	broker.id=1
+        ii.	listeners=PLAINTEXT://:9092
+        iii.	log.dirs=/var/lib/kafka
+        iv.	zookeeper.connect=localhost:2181
+              systemctl start confluent-kafka
+
+3.	Verify kafka and zookeeper using below commands
+    a.	systemctl status confluent-zookeeper
+    b.	systemctl status confluent-kafka
+    c.	ps –ef |grep kafka
